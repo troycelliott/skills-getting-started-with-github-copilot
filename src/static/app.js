@@ -5,15 +5,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
 
+  let hideMessageTimeoutId;
+
   function showMessage(message, type) {
     messageDiv.textContent = message;
-    messageDiv.className = type;
+    messageDiv.className = `message ${type}`;
     messageDiv.classList.remove("hidden");
+    clearTimeout(hideMessageTimeoutId);
 
     // Hide message after 5 seconds
-    setTimeout(() => {
-      messageDiv.classList.add("hidden");
-    }, 5000);
+    hideMessageTimeoutId = setTimeout(() => messageDiv.classList.add("hidden"), 5000);
   }
 
   async function unregisterParticipant(activity, email) {
