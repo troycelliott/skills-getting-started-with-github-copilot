@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const activitiesList = document.getElementById("activities-list");
+  const activityCardTemplate = document.getElementById("activity-card-template");
   const activitySelect = document.getElementById("activity");
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
@@ -15,17 +16,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Populate activities list
       Object.entries(activities).forEach(([name, details]) => {
-        const activityCard = document.createElement("div");
-        activityCard.className = "activity-card";
+        const activityCard = activityCardTemplate.content.cloneNode(true);
+        const activityName = activityCard.querySelector(".activity-name");
+        const activityDescription = activityCard.querySelector(".activity-description");
+        const activitySchedule = activityCard.querySelector(".activity-schedule");
+        const activityAvailability = activityCard.querySelector(".activity-availability");
+        const participantsList = activityCard.querySelector(".participants-list");
 
         const spotsLeft = details.max_participants - details.participants.length;
+        activityName.textContent = name;
+        activityDescription.textContent = details.description;
+        activitySchedule.textContent = details.schedule;
+        activityAvailability.textContent = `${spotsLeft} spots left`;
 
-        activityCard.innerHTML = `
-          <h4>${name}</h4>
-          <p>${details.description}</p>
-          <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
-        `;
+        if (details.participants.length) {
+          details.participants.forEach((participant) => {
+            const participantItem = document.createElement("li");
+            participantItem.textContent = participant;
+            participantsList.appendChild(participantItem);
+          });
+        } else {
+          const emptyItem = document.createElement("li");
+          emptyItem.textContent = "No participants yet";
+          participantsList.appendChild(emptyItem);
+        }
 
         activitiesList.appendChild(activityCard);
 
