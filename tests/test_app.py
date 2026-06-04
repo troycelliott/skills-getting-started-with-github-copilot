@@ -89,7 +89,8 @@ def test_signup_returns_400_when_activity_is_full(client):
 
     for index in range(slots_to_fill):
         filler_email = f"filler{index}@mergington.edu"
-        client.post(f"/activities/{activity_name}/signup", params={"email": filler_email})
+        filler_response = client.post(f"/activities/{activity_name}/signup", params={"email": filler_email})
+        assert filler_response.status_code == 200
 
     overflow_email = "overflow@mergington.edu"
 
